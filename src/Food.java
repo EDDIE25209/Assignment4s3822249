@@ -78,9 +78,10 @@ public class Food {
 
     public boolean AddFood(String foodName, String foodDescription, double foodPrice, int foodCalorie, String foodType) throws IOException
     {
+        // All the criteria check methods done for it to be a valid entry. Methods were made for checking each criteria
         if(foodNameCheck(foodName) && foodCalorieCheck(foodCalorie,foodType) && foodDescriptionCheck(foodDescription) && foodTypeCheck(foodType) && foodPriceCheck(foodCalorie,foodPrice))
         {
-            //Check the number of lines
+            //Check the number of lines to calculate the food ID number to be added
             File file1 =new File("menuitems.txt");
             long nextFoodID = 0;
             try (BufferedReader reader = new BufferedReader(new FileReader(file1))) {
@@ -89,7 +90,7 @@ public class Food {
                 e.printStackTrace();
             }
 
-
+           // Creating the output text to be written into the file
            String outputText= (nextFoodID+1)+"|"+foodName+"|"+foodDescription+"|"+foodPrice+"|"+foodCalorie+"|"+foodType;
 
             FileWriter fw =new FileWriter(file1,true);
@@ -101,6 +102,8 @@ public class Food {
         else return false;
 
     }
+
+    // This method ensures that criteria food name is between 5 to 30 characters
     private boolean foodNameCheck(String foodName)
     {
         if (foodName.length()>30 || foodName.length()<5)
@@ -110,18 +113,21 @@ public class Food {
         }else
             {return true;}
     }
+
+    // This method ensures that criteria food description is between 5 to 50 words
+
     private boolean foodDescriptionCheck(String foodDescription)
     {
-        int count = 1;
+        int numOfWords = 1;
 
         for (int i = 0; i < foodDescription.length() - 1; i++)
         {
             if ((foodDescription.charAt(i) == ' ') && (foodDescription.charAt(i + 1) != ' '))
             {
-                count++;
+                numOfWords++;
             }
         }
-       if(count<5 || count >50 )
+       if(numOfWords<5 || numOfWords >50 )
        {
            System.out.println(" Food Description should be between 5 and 50 words");
            return false;
@@ -130,7 +136,7 @@ public class Food {
     }
 
 
-
+    // Only the valid food types names are allowed to proceed here
     private boolean foodTypeCheck(String foodType)
     {
         if(foodType.compareTo("Kid Food")==0 || foodType.compareTo("Adult Food")==0 || foodType.compareTo("Healthy Food")==0 || foodType.compareTo("ElderlyFood Food")==0 ){
@@ -143,6 +149,9 @@ public class Food {
             return false;
         }
     }
+
+    // This Method ensures that It should not be possible to add foods with more than 1500 calorie
+    //If the type of food is “Kid Food”, their calorie should be less than 800.
     private boolean foodCalorieCheck(int foodCalorie,String foodType)
     {
         if (foodCalorie>1500)
@@ -157,6 +166,11 @@ public class Food {
         }
        else return true;
     }
+
+    // This Method ensures that the price of each food should be between $5 and $150.
+    //The price of foods with more than 1000 calories should be less than $100.
+
+
     private boolean foodPriceCheck(int foodCalorie,double foodPrice)
     {
         if (foodPrice>150.00 || foodPrice<5.00)
