@@ -1,2 +1,6 @@
 1|Butter Chicken|This is an amazing way to eat the best chicken|35.0|670|Adult Food
 2|Butter Chicken|This is an amazing way to eat the best chicken|35.0|670|Adult Food
+3|Butter Chicken|This is an amazing way to eat the best chicken|35.0|670|Adult Food
+4|Butter Chicken|This is an amazing way to eat the best chicken|35.0|670|Adult Food
+5|Butter Chicken|This is an amazing way to eat the best chicken|35.0|670|Adult Food
+6|Butter Chicken|This is an amazing way to eat the best chicken|35.0|670|Adult Food

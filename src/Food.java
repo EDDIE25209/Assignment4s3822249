@@ -76,7 +76,7 @@ public class Food {
     }
     public Food(){}
 
-    public boolean AddFood(String foodName, String foodDescription, double foodPrice, int foodCalorie, String foodType) throws IOException
+    public boolean addFood(String foodName, String foodDescription, double foodPrice, int foodCalorie, String foodType) throws IOException
     {
         // All the criteria check methods done for it to be a valid entry. Methods were made for checking each criteria
         if(foodNameCheck(foodName) && foodCalorieCheck(foodCalorie,foodType) && foodDescriptionCheck(foodDescription) && foodTypeCheck(foodType) && foodPriceCheck(foodCalorie,foodPrice))
