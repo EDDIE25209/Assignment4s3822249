@@ -1,4 +1,7 @@
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Food {
 
@@ -185,18 +188,139 @@ public class Food {
         }
         else return true;
     }
+   // Food is updated according to the input of the column number,FOOD id and the proposed value of change if the criteria are met the txt file is updated
+    public boolean UpdateFood(String File, String FoodID, int columnNo , String value) throws IOException {
+        ArrayList <Food>foodItems= readFoodDetails(File);
 
-    public boolean UpdateFood(String foodID,String foodName, String foodDescription, double foodPrice, int foodCalorie, String foodType)
+        //Check is food item exists
+        boolean foodExists=false;
+        boolean changeMade =false;
 
-    {
 
-        //  Update the information of a given food in a TXT file
+       for(int i = 0 ; i< foodItems.size();i++)
+       {
+           if(foodItems.get(i).getFoodID().compareTo(FoodID)==0)
+           {
+               foodExists=true;
 
-        // if the food information is updated in the TXT file, it should return true;
+               if (columnNo==2)
+               {
+                   if(foodNameCheck(value))
+                   {
+                       foodItems.get(i).setFoodName(value);
+                       writeFoodToText(foodItems);
+                       changeMade=true;
+                   }
 
-        // if the food information cannot be updated in the TXT file, it should
-        return false;
+               }else if (columnNo==3)
+               {
+                   if(foodDescriptionCheck(value))
+                   {
+                       foodItems.get(i).setFoodDescription(value);
+                       writeFoodToText(foodItems);
+                       changeMade = true;
+                   }
+
+               }else if(columnNo ==4)
+               {
+                   if(foodPriceCheck(foodItems.get(i).getFoodCalorie(),Double.parseDouble(value)))
+                   {
+                       if(Double.parseDouble(value)>(foodItems.get(i).foodPrice*1.10))
+                       {
+                           System.out.println("New Price cannot be increased by more than 10 percent - "+(foodItems.get(i).foodPrice*1.10));
+                       }
+                       else
+                       {
+                           foodItems.get(i).setFoodPrice(Double.parseDouble(value));
+                           writeFoodToText(foodItems);
+                           changeMade = true;
+                       }
+                   }
+
+
+               }else if(columnNo ==5)
+               {
+                   System.out.println("Calories cannot be changed");
+
+               }else if(columnNo ==6)
+               {
+                   if(foodTypeCheck(value))
+                   {
+                       if(value.compareTo("Kid Food")==0)
+                       {
+                           System.out.println("It should not be possible to change the type of food to “Kid Food” or the Food Type is already Kid Food");
+                       }
+                       else
+                       {
+                           foodItems.get(i).setFoodType(value);
+                           writeFoodToText(foodItems);
+                           changeMade = true;
+                       }
+                   }
+
+               }else
+
+                   {
+                       System.out.println("Invalid Column number");
+                   }
+
+           }
+       }
+        if(!foodExists)
+        {
+            System.out.println("Food Item not found");
+        }
+
+        if(changeMade)
+        {
+            return true;
+        }else return false;
 
     }
+    public static ArrayList<Food> readFoodDetails(String filename) throws FileNotFoundException {
+        File file = new File(filename);
+        Scanner s= new Scanner(file);
+
+        ArrayList<Food> foodList =new ArrayList<>();
+
+        while(s.hasNextLine())
+        {
+            String line =s.nextLine();
+            String[] foodItems = line.split("\\|");
+            String foodID = foodItems[0];
+            String foodName= foodItems[1];
+            String foodDescription= foodItems[2];
+            Double foodPrice= Double.parseDouble(foodItems[3]);
+            Integer foodCalorie= Integer.parseInt(foodItems[4]);
+            String foodType= foodItems[5];
+
+            Food food = new Food(foodID,foodName,foodDescription,foodPrice,foodCalorie,foodType);
+            foodList.add(food);
+        }
+        return foodList;
+    }
+
+    public void writeFoodToText(ArrayList<Food> foodItems) throws IOException {
+            //Erase Old Contents
+
+            File file1 = new File("menuitems.txt");
+            PrintWriter writer = new PrintWriter(file1);
+            writer.print("");
+            writer.close();
+
+            //Add the contents to be written into text file from the list
+
+       for(int i = 0 ; i < foodItems.size();i++)
+       {
+           String outputText= foodItems.get(i).getFoodID()+"|"+foodItems.get(i).getFoodName()+"|"+foodItems.get(i).getFoodDescription()+"|"+foodItems.get(i).getFoodPrice()+"|"+foodItems.get(i).getFoodCalorie()+"|"+foodItems.get(i).getFoodType();
+
+           FileWriter fw =new FileWriter(file1,true);
+           PrintWriter pw = new PrintWriter(fw);
+           pw.println(outputText);
+           pw.close();
+       }
+
+
+        }
 
 }
